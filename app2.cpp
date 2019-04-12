@@ -114,11 +114,41 @@ public:
     char* data() const { return mem; }
 };
 
+inline auto operator"" _s(const char* str, unsigned long sz)
+{
+    return String(str);
+}
+
+struct Celcius
+{
+    long double value;
+    Celcius(long double value) : value(value) { }
+};
+
+inline auto operator"" _celcius(long double value)
+{
+    return Celcius(value);
+}
+
+inline auto operator"" _celcius(unsigned long long int value)
+{
+    return Celcius(value);
+}
+
 int main(int argc, char* argv[])
 {
-    auto s = String("Deneme");
+    auto temperature = 83.0_celcius;
+
+//    auto s = String("Deneme");
+    auto s = "Deneme"_s;
     cout << s[3] << endl;
     s[3] = 'a';
+
+    auto integer = 5;
+    auto floating = 5.3f;
+    auto double_value = 13.0;
+    auto long_value = 13l;
+    auto long_long_value = 13ll;
 
     auto x = String(s); // copy c-tor
     auto y = String(s); // copy c-tor
