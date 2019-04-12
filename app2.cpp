@@ -2,11 +2,18 @@
 
 #include <iostream>
 
+// almost always auto - aaa rule: move type to the right
+// operator overloading as free functions
+// user-defined literals
+// unified/universal initialization
+// Vec2d, Vec3d, templates (typename, non-type param)
+
+
 using namespace std;
 
 auto string_length(const char* p) -> int
 {
-    int sz = 0;
+    auto sz = 0;
     while(*p++) ++sz;
     return sz;
 }
@@ -79,6 +86,11 @@ public:
         return *this;
     }
 
+    char& operator[](int idx) const
+    {
+        return mem[idx];
+    }
+
 
     void clear()
     {
@@ -102,19 +114,21 @@ public:
     char* data() const { return mem; }
 };
 
-
 int main(int argc, char* argv[])
 {
-    String s("Deneme");
-    String x(s); // copy c-tor
-    String y = s; // copy c-tor
-    String z;
+    auto s = String("Deneme");
+    cout << s[3] << endl;
+    s[3] = 'a';
+
+    auto x = String(s); // copy c-tor
+    auto y = String(s); // copy c-tor
+    auto z = String();
     z = s; // copy assignment
 
     cout << "size = " << s.size() << endl;
     cout << s.data() << endl;
 
-    String a = (String&&)s; // move c-tor
+    auto a = (String&&)s; // move c-tor
 
     cout << "size = " << a.size() << endl;
     cout << a.data() << endl;
