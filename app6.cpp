@@ -3,19 +3,14 @@
 
 using namespace std;
 
-enum MatrixType
-{
-    Integer = 0,
-    Float = 1
-};
-
 struct MatrixBase
 {
-    MatrixType type;
-
-    //    void print()
-//    {
-//    }
+    // abstract class because of = 0;
+    // inheriting classes MUST implement print function later
+    virtual void print() const = 0;
+    virtual void show() const {
+        cout << "Showing..." << endl;
+    }
 };
 
 template<typename T>
@@ -40,7 +35,7 @@ struct Matrix : public MatrixBase
         return values[row_idx * nCols + col_idx];
     }
 
-    void print() const
+    void print() const override
     {
         for(int i=0; i<nRows; ++i)
         {
@@ -58,14 +53,12 @@ struct Matrix : public MatrixBase
 int main(int argc, char* argv[])
 {
     auto mf = Matrix<float>{3, 5};
-    mf.type = MatrixType::Float;
     mf(2, 1) = 1000.5f;
     mf.print();
 
     cout << endl;
 
     auto mi = Matrix<int>{5, 2};
-    mi.type = MatrixType::Integer;
     mi(2, 1) = 500;
     mi.print();
 
@@ -78,11 +71,17 @@ int main(int argc, char* argv[])
     for(auto m : V) // m is a MatrixBase*
     {
         cout << "---------------" << endl;
-        if(m->type == Integer)
-            ((Matrix<int>*)m)->print();
-        else if(m->type == Float)
-            ((Matrix<float>*)m)->print();
+        m->print();
     }
+
+//    for(auto m : V) // m is a MatrixBase*
+//    {
+//        cout << "---------------" << endl;
+//        if(m->type == Integer)
+//            ((Matrix<int>*)m)->print();
+//        else if(m->type == Float)
+//            ((Matrix<float>*)m)->print();
+//    }
 
     return 0;
 }
