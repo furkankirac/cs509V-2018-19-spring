@@ -31,10 +31,10 @@ inline auto dot_product_3d(Vec3d a, Vec3d b) {
     return a.x*b.x + a.y*b.y + a.z*b.z;
 }
 
-template<int nDims>
+template<int nDims, typename T = int>
 struct Vec
 {
-    int values[nDims];
+    T values[nDims];
 
     auto dot_product(const Vec<nDims>& other)
     {
@@ -86,6 +86,8 @@ int main(int argc, char* argv[])
 
     Vec<2>{10, 10}.print();
     Vec<8>{1,2,3,4,5,6,7,8}.print();
+
+    Vec<3, double>{10.3, 10.4}.print();
 
     print(Vec<2>{10, 10});
 
