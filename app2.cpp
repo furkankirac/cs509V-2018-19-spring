@@ -13,7 +13,7 @@ using namespace std;
 
 auto string_length(const char* p) -> int
 {
-    auto sz = 0;
+    auto sz{0};
     while(*p++) ++sz;
     return sz;
 }
@@ -33,7 +33,7 @@ public:
 
     void copyFrom(const char* p)
     {
-        for(int i=0; i<str_size; ++i)
+        for(auto i=0; i<str_size; ++i)
             mem[i] = p[i];
         mem[str_size] = 0; // = '\0';
     }
@@ -52,7 +52,7 @@ public:
 
     // copy c-tor
     String(const String& other) :
-        str_size(other.size()), mem(nullptr)
+        str_size{other.size()}, mem{}
     {
         init(str_size);
         copyFrom(other.mem);
@@ -69,8 +69,8 @@ public:
     }
 
     String(String&& other) :
-        str_size(other.size()),
-        mem(other.mem)
+        str_size{other.size()},
+        mem{other.mem}
     {
         other.str_size = 0;
         other.mem = nullptr;
@@ -150,9 +150,9 @@ int main(int argc, char* argv[])
     auto long_value = 13l;
     auto long_long_value = 13ll;
 
-    auto x = String(s); // copy c-tor
-    auto y = String(s); // copy c-tor
-    auto z = String();
+    auto x = String{s}; // copy c-tor
+    auto y = String{s}; // copy c-tor
+    auto z = String{};
     z = s; // copy assignment
 
     cout << "size = " << s.size() << endl;
