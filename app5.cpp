@@ -11,14 +11,8 @@ template<typename T, int nElems>
 struct Array
 {
     T values[nElems];
-
-    T& operator[](int idx) const
-    {
-        return values[idx];
-    }
-
+    T& operator[](int idx) const { return values[idx]; }
 };
-
 
 int main(int argc, char* argv[])
 {
@@ -66,9 +60,32 @@ int main(int argc, char* argv[])
 
     int K[10]; // old c-style array
     auto K2 = array<int, 10>{}; // c++ style array
-    auto K3 = Array<int, 10>{}; // my implementation
+    auto K3 = Array<int, 10>{5, 2, 3}; // my implementation
     K2[5] = 10; // standard access
     K2.at(5) = 20; // access with bounds checking
+
+    auto A = vector<double>{1.1, 2.5, -5.8, 10.0, 20.3};
+    auto sz = A.size(); // get size here only once
+    for(auto i=0; i<sz; ++i) // use it here for performance
+        cout << A[i] << endl;
+
+    { // while loop equivalent
+        auto i = 0;
+        auto sz = A.size();
+        while(i<sz) {
+            cout << A[i] << endl;
+            ++i;
+        }
+    }
+
+    // range based for-loop
+    // iterates over everthing and gives back values in container
+    // no index is required, values are directly given
+    for(auto a : A)
+        cout << a << endl;
+
+//    for(auto k3 : K3)
+//        cout << k3 << endl;
 
     return 0;
 }
