@@ -3,30 +3,32 @@
 
 using namespace std;
 
-struct MatrixBase
-{
-//    void print()
-//    {
-//    }
-};
-
 enum MatrixType
 {
     Integer = 0,
     Float = 1
 };
 
-template<typename T>
-struct Matrix : public MatrixBase
+struct MatrixBase
 {
     MatrixType type;
 
+    //    void print()
+//    {
+//    }
+};
+
+template<typename T>
+struct Matrix : public MatrixBase
+{
     int nRows, nCols;
     vector<T> values;
 
     Matrix(int nRows, int nCols) :
         nRows{nRows},
         nCols{nCols},
+        // std::vector c-tor for this many Ts to be allocated
+        // don't use curly brackets here, it means different thing
         values(nRows*nCols)
     { }
 
@@ -55,21 +57,32 @@ struct Matrix : public MatrixBase
 
 int main(int argc, char* argv[])
 {
-    auto mf = Matrix<float>(3, 5);
+    auto mf = Matrix<float>{3, 5};
     mf.type = MatrixType::Float;
     mf(2, 1) = 1000.5f;
     mf.print();
 
     cout << endl;
 
-    auto mi = Matrix<int>(5, 2);
+    auto mi = Matrix<int>{5, 2};
     mi.type = MatrixType::Integer;
     mi(2, 1) = 500;
     mi.print();
 
     auto V = vector<MatrixBase*>{};
     V.push_back(&mi);
+    V.push_back(&mi);
     V.push_back(&mf);
+    V.push_back(&mi);
+
+    for(auto m : V) // m is a MatrixBase*
+    {
+        cout << "---------------" << endl;
+        if(m->type == Integer)
+            ((Matrix<int>*)m)->print();
+        else if(m->type == Float)
+            ((Matrix<float>*)m)->print();
+    }
 
     return 0;
 }
