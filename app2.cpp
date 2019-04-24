@@ -42,7 +42,7 @@ public:
     {
     }
 
-    String(char const* p)
+    String(char const* p) : mem(nullptr)
     {
         cout << "constructing String." << endl;
         str_size = string_length(p);
