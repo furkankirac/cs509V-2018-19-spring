@@ -7,8 +7,12 @@
 using Brightness = unsigned char;
 
 //typedef void (*PrintStyler)(int);
-
 using PrintStyler = void (*)(int);
+
+struct PrintWithStyle
+{
+    virtual void operator() (int value) const = 0;
+};
 
 struct Pixel // Colored Pixel
 {
@@ -19,7 +23,7 @@ struct MatrixBase
 {
     // abstract class because of = 0;
     // inheriting classes MUST implement print function later
-    virtual void print(PrintStyler styler = nullptr) const = 0;
+    virtual void print(const PrintWithStyle& styler) const = 0;
     virtual void show() const {
         std::cout << "Showing..." << std::endl;
     }
@@ -47,7 +51,7 @@ struct Matrix : public MatrixBase
         return values[row_idx * nCols + col_idx];
     }
 
-    void print(PrintStyler styler = nullptr) const override
+    void print(PrintStyler styler) const
     {
         for(int i=0; i<nRows; ++i)
         {
@@ -58,10 +62,25 @@ struct Matrix : public MatrixBase
 
                 if constexpr(!std::is_same<T, Pixel>::value)
                 {
-                    if(styler == nullptr)
-                        std::cout << (*this)(i, j);
-                    else
-                        styler((*this)(i, j));
+                    styler((*this)(i, j));
+                }
+            }
+            std::cout << std::endl;
+        }
+    }
+
+    void print(const PrintWithStyle& styler) const override
+    {
+        for(int i=0; i<nRows; ++i)
+        {
+            for(int j=0; j<nCols; ++j)
+            {
+                if(j!=0)
+                    std::cout << " ";
+
+                if constexpr(!std::is_same<T, Pixel>::value)
+                {
+                    styler((*this)(i, j));
                 }
             }
             std::cout << std::endl;
@@ -81,7 +100,7 @@ struct Image : public Matrix<Pixel>
     // you need to explicitly say it
     using Matrix<Pixel>::Matrix;
 
-    void print(PrintStyler styler = nullptr) const override
+    void print(const PrintWithStyle& styler) const override
     {
         for(int i=0; i<nRows; ++i)
         {

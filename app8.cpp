@@ -56,25 +56,49 @@
 
 using namespace std;
 
-void printWithStyleA(int value)
+struct PrintWithStyleA : public PrintWithStyle
 {
-    cout << value << ", ";
-}
+    void operator() (int value) const override
+    {
+        cout << value << ", ";
+    }
+};
 
-void printWithStyleB(int value)
+struct PrintWithStyleB : public PrintWithStyle
 {
-    cout << value << "| ";
-}
+    void operator() (int value) const override
+    {
+        cout << value << "| ";
+    }
+};
+
+void printWithStyleA(int value) { cout << value << ", "; }
+void printWithStyleB(int value) { cout << value << "| "; }
 
 
 int main(int argc, char* argv[])
 {
+    auto stylerA = PrintWithStyleA{};
+    auto stylerB = PrintWithStyleB{};
+
+//    stylerA(1000);
+//    cout << endl;
+//    stylerB(1000);
+//    cout << endl;
+
 
     auto m1 = Matrix<int>{5, 5};
     m1(3, 2) = 100;
+
+    m1.print(stylerA);
+    cout << endl;
+    m1.print(stylerB);
+    cout << endl;
+
     m1.print(&printWithStyleA);
     cout << endl;
     m1.print(&printWithStyleB);
+
 
     return 0;
 }
