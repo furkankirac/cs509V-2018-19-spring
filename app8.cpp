@@ -56,9 +56,25 @@
 
 using namespace std;
 
+void printWithStyleA(int value)
+{
+    cout << value << ", ";
+}
+
+void printWithStyleB(int value)
+{
+    cout << value << "| ";
+}
+
 
 int main(int argc, char* argv[])
 {
+
+    auto m1 = Matrix<int>{5, 5};
+    m1(3, 2) = 100;
+    m1.print(&printWithStyleA);
+    cout << endl;
+    m1.print(&printWithStyleB);
 
     return 0;
 }

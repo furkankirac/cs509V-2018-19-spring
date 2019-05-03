@@ -6,6 +6,10 @@
 
 using Brightness = unsigned char;
 
+//typedef void (*PrintStyler)(int);
+
+using PrintStyler = void (*)(int);
+
 struct Pixel // Colored Pixel
 {
     Brightness red, green, blue;
@@ -15,7 +19,7 @@ struct MatrixBase
 {
     // abstract class because of = 0;
     // inheriting classes MUST implement print function later
-    virtual void print() const = 0;
+    virtual void print(PrintStyler styler = nullptr) const = 0;
     virtual void show() const {
         std::cout << "Showing..." << std::endl;
     }
@@ -43,7 +47,7 @@ struct Matrix : public MatrixBase
         return values[row_idx * nCols + col_idx];
     }
 
-    void print() const override
+    void print(PrintStyler styler = nullptr) const override
     {
         for(int i=0; i<nRows; ++i)
         {
@@ -53,7 +57,12 @@ struct Matrix : public MatrixBase
                     std::cout << " ";
 
                 if constexpr(!std::is_same<T, Pixel>::value)
-                    std::cout << (*this)(i, j);
+                {
+                    if(styler == nullptr)
+                        std::cout << (*this)(i, j);
+                    else
+                        styler((*this)(i, j));
+                }
             }
             std::cout << std::endl;
         }
@@ -72,7 +81,7 @@ struct Image : public Matrix<Pixel>
     // you need to explicitly say it
     using Matrix<Pixel>::Matrix;
 
-    void print() const override
+    void print(PrintStyler styler = nullptr) const override
     {
         for(int i=0; i<nRows; ++i)
         {
