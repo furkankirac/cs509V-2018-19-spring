@@ -56,24 +56,29 @@
 
 using namespace std;
 
-struct PrintWithStyleA : public PrintWithStyle
+struct PrintWithStyleA
 {
-    void operator() (int value) const override
+    void operator() (int value) const
     {
         cout << value << ", ";
     }
-};
-
-struct PrintWithStyleB : public PrintWithStyle
-{
-    void operator() (int value) const override
+    void operator() (double value) const
     {
-        cout << value << "| ";
+        cout << value << "; ";
     }
 };
 
-void printWithStyleA(int value) { cout << value << ", "; }
-void printWithStyleB(int value) { cout << value << "| "; }
+struct PrintWithStyleB
+{
+    void operator() (int value) const
+    {
+        cout << value << "| ";
+    }
+    void operator() (double value) const
+    {
+        cout << value << "|| ";
+    }
+};
 
 
 int main(int argc, char* argv[])
@@ -90,15 +95,18 @@ int main(int argc, char* argv[])
     auto m1 = Matrix<int>{5, 5};
     m1(3, 2) = 100;
 
+    auto m2 = Matrix<double>{3, 3};
+    m2(1, 2) = 200.0;
+
     m1.print(stylerA);
     cout << endl;
     m1.print(stylerB);
     cout << endl;
 
-    m1.print(&printWithStyleA);
+    m2.print(stylerA);
     cout << endl;
-    m1.print(&printWithStyleB);
-
+    m2.print(stylerB);
+    cout << endl;
 
     return 0;
 }
