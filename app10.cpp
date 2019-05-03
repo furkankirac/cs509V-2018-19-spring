@@ -34,49 +34,60 @@
 // structured bindings
 
 #include <iostream>
-#include <vector>
-#include <algorithm>
+#include <memory>
 
 using namespace std;
 
-//struct Comparator
-//{
-//    int step=10;
+template<typename T> void repeat(const T text, int times)
+{
+    for(int i=0; i<times; ++i)
+        cout << text << endl;
+}
 
-//    bool ascending;
-//    int& k;
-//    Comparator(bool ascending, int& k) : ascending{ascending}, k{k} { }
+auto repeat_lambda = [](auto text, int times)
+{
+    for(int i=0; i<times; ++i)
+        cout << text << endl;
+};
 
-//    auto operator()(int a, int b) const
-//    {
-//        k += step;
-//        if(ascending)
-//            return a < b;
-//        return a > b;
-//    }
-//};
+
+struct Dummy
+{
+    int size;
+    int* mem;
+    Dummy(int size) : size{size}, mem{new int[size]}
+    {
+    }
+
+    Dummy(const Dummy& other) : size{other.size}, mem{new int[size]}
+    {
+        copy(other.mem, other.mem+other.size, mem);
+    }
+
+    ~Dummy()
+    {
+        delete[] mem;
+        mem = nullptr;
+    }
+};
+
+void func(shared_ptr<Dummy> d)
+{
+
+}
 
 
 int main(int argc, char* argv[])
 {
-    auto v = vector<int>{20, 13, -5, 50, 42, 101, -10};
+    auto dummy = make_shared<Dummy>(1000000);
+    func(dummy);
+//    auto dummy2 = dummy; // copy c-tor
 
-    bool ascending = true;
-    int k = 0;
-
-    auto descendingSorter = [step=10, ascending, &k](int a, int b) {
-        k += step;
-        if(ascending)
-            return a < b;
-        return a > b;
-    };
-//    auto descendingSorter = Comparator{ascending, k};
-
-    sort(v.begin(), v.end(), descendingSorter);
-    for(auto val : v)
-        cout << val << endl;
-
-    cout << "Danisma sayisi = " << k << endl;
+    repeat("Hello World!", 3);
+    repeat(1000, 2);
+    cout << endl;
+    repeat_lambda("Hello World!", 3);
+    repeat_lambda(1000, 2);
 
     return 0;
 }
