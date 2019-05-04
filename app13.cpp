@@ -6,13 +6,12 @@
 // template specializations (a functional programming primer)
 // is_same, remove_const, remove_volatile, remove_cv, remove_reference, decay
 
-// good to know: template-template types, template auto, type constructors
-
-
-// brace initialization, std::initializer_list
-
 // variadic parameters
 // variadic templates: printAll: old style recursion, simplified if version
+
+// good to know: template-template types, template auto, type constructors
+// brace initialization, std::initializer_list
+
 // pack expansion
 // initializer_list trick for runOnAll
 // fold expressions
@@ -28,6 +27,8 @@
 
 
 #include <iostream>
+#include <stdio.h>
+
 
 using namespace std;
 
@@ -64,21 +65,45 @@ namespace my
     template<typename K>    struct remove_reference<K&&> { using type = K; };
 }
 
+int sumAllIntegers(const char* title, ...)
+{
+    va_list args;
+    va_start(args, title);
+
+    cout << title << endl;
+
+    int sum = 0;
+    while(true)
+    {
+        int val = va_arg(args, int);
+        sum += val;
+        if(val == -1)
+            break;
+    }
+    va_end(args);
+    return sum;
+}
+
+
+
 
 int main(int argc, char* argv[])
 {
-    auto b1 = my::is_same<int, float>::value;
-    auto b2 = my::is_same<double, double>::value;
+//    auto b1 = my::is_same<int, float>::value;
+//    auto b2 = my::is_same<double, double>::value;
 
-//    auto a = TypeDisplayer< my::remove_cv<const volatile int>::type >{};
-//    auto b = TypeDisplayer< my::remove_cv<volatile char*>::type >{};
+////    auto a = TypeDisplayer< my::remove_cv<const volatile int>::type >{};
+////    auto b = TypeDisplayer< my::remove_cv<volatile char*>::type >{};
 
-    auto r = TypeDisplayer< remove_reference<int&>::type >{};
+//    auto r = TypeDisplayer< remove_reference<int&>::type >{};
 
-//    auto c = my::is_same<double, char>::is_char;
+////    auto c = my::is_same<double, char>::is_char;
 
-    cout << b1 << endl;
-    cout << b2 << endl;
+//    cout << b1 << endl;
+//    cout << b2 << endl;
+
+    cout << sumAllIntegers("HELLO", 10, 20, 30, 5, 100, 253, 5) << endl;
+
 
     return 0;
 }
