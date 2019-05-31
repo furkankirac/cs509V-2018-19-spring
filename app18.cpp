@@ -34,15 +34,21 @@ auto filter(const T& v, FUNC lambda)/* -> vector<T>*/
     return filtered;
 }
 
+template<typename T>
+void printIt(const T& container)
+{
+    for(const auto& str : container)
+        cout << str << endl;
+}
 
 int main(int argc, char* argv[])
 {
     auto s = vector<string>{"hello", "world", "how", "are", "you"};
 
-    auto printIt = [](const auto& container) {
-        for(const auto& str : container)
-            cout << str << endl;
-    };
+//    auto printIt = [](const auto& container) {
+//        for(const auto& str : container)
+//            cout << str << endl;
+//    };
 
     struct Lambda1
     {
